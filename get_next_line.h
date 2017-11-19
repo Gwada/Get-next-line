@@ -6,7 +6,7 @@
 /*   By: dlavaury <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 14:33:19 by dlavaury          #+#    #+#             */
-/*   Updated: 2017/11/18 20:00:57 by dlavaury         ###   ########.fr       */
+/*   Updated: 2017/11/19 17:11:01 by dlavaury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,38 @@
 # include <sys/types.h>
 # include <sys/uio.h>
 # include "libft.h"
+# include <stdio.h>
 
 /*
 **	MACCROS
 */
 
 # define BUFF_SIZE 20
-# define FD_SIZE_MAX 1024
 
 /*
 **	STRUCTURES
 */
 
+enum color
+{
+	BLACK,
+	RED
+};
+
 typedef struct	s_fd
 {
-	int		ret;
-	int		read;
-	int		idx;
-	char	buff[BUFF_SIZE + 1];
-	char	*temp;
-	char	*line;
-}				t_fd
+	int			fd;
+	int			ret;
+	int			rd;
+	int			idx;
+	char		buf[BUFF_SIZE + 1];
+	char		*tmp;
+	char		*line;
+	struct s_fd	*prt;
+	struct s_fd	*lft;
+	struct s_fd	*rgt;
+	enum color	clr;
+}				t_fd;
 
 /*
 **	PROTOTYPES

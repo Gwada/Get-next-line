@@ -6,43 +6,48 @@
 /*   By: dlavaury <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 14:32:58 by dlavaury          #+#    #+#             */
-/*   Updated: 2017/11/18 20:01:00 by dlavaury         ###   ########.fr       */
+/*   Updated: 2017/11/19 17:11:05 by dlavaury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int		ft_string_traitement(t_fd *file)
+static	t_fd	*ft_first(t_fd *root, int fd)
 {
-	size_t len;
-
-	len = 0;
-	file->idx = -1;
-	while (++file->idx < file->ret/* && file->buff[file->idx] != '\n'*/)
+	//printf ("in ft-first\n");
+	if (!root)
 	{
-		if (file->buff[file->idx] == '\n')
-		{
-			if (!file->line)
-				if (!(file->temp = ft_strsub(file->buff, 0, file->idx)))
-					return (0);
-		}
+		//printf("ptr NULL\n");
+		if (!(root = (t_fd*)malloc(sizeof(t_fd))))
+			return (NULL);
+		//printf("malloc ok\n");
+		root->fd = fd;
+		root->ret = 1;
+		root->rd = 0;
+		root->idx = 0;
+		ft_bzero(root->buf, BUFF_SIZE + 1);
+		root->tmp = NULL;
+		root->line = NULL;
+		root->prt = NULL;
+		root->lft = NULL;
+		root->rgt = NULL;
 	}
+	//printf ("root->fd = %d root->idx = %d\n", root->fd, root->idx);
+	//printf("out ft_first\n");
+	return (root);
 }
 
-int		get_next_line(const int fd, char **line)
+int			get_next_line(const int fd, char **line)
 {
-	static t_fd		file[FD_SIZE_MAX];
-
-	if (fd < 0 || !line || BUFF_SIZE < 1)
+	static t_fd		*root;
+	
+	//printf("in get_next_line\n");
+	(void)line;
+	if (fd < 0 || !(root = ft_first(root, fd)) || !line || BUFF_SIZE < 0)
 		return (-1);
-	file[fd].read = 1;
-	while (file[fd].read == 1)
-	{
-		ft_bzero(file[fd].buff, BUFF_SIZE + 1);
-		if ((file[fd].ret = read(fd, file[fd].buff, BUFF_SIZE)) == -1)
-			return (-1);
-		if (!ft_string_traitement(&file[fd]))
-			return (-1);;
-	}
-	return (file[fd].read);
+	//printf("re get_next_line\n");
+	printf ("fd = %d root->idx = %d\nend gnl\n", root->fd,root->idx);
+	printf ("%d\n", root->clr);
+	root->idx++;
+	return (0);
 }
