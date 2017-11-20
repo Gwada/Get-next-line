@@ -6,7 +6,7 @@
 /*   By: dlavaury <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 14:33:19 by dlavaury          #+#    #+#             */
-/*   Updated: 2017/11/19 19:46:18 by dlavaury         ###   ########.fr       */
+/*   Updated: 2017/11/20 14:57:03 by dlavaury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,20 @@ enum color
 	RED
 };
 
-typedef struct	s_fd
+typedef struct		s_fd
 {
-	int			fd;
-	int			ret;
-	int			rd;
-	int			idx;
-	char		buf[BUFF_SIZE + 1];
-	char		*tmp;
-	char		*line;
-	struct s_fd	*prt;
-	struct s_fd	*lft;
-	struct s_fd	*rgt;
-	enum color	clr;
-}				t_fd;
+	int				fd;
+	int				ret;
+	int				rd;
+	int				idx;
+	char			b[BUFF_SIZE + 1];
+	char			*t;
+	char			*line;
+	struct s_fd		*p;
+	struct s_fd		*l;
+	struct s_fd		*r;
+	enum color		c;
+}					t_fd;
 
 /*
 **	PROTOTYPES
