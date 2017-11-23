@@ -32,25 +32,14 @@
 **	STRUCTURES
 */
 
-enum color
-{
-	BLACK,
-	RED
-};
-
 typedef struct		s_fd
 {
 	int				fd;
 	int				ret;
-	int				rd;
-	int				idx;
-	char			b[BUFF_SIZE + 1];
-	char			*t;
+	char			buffer[BUFF_SIZE + 1];
 	char			*line;
-	struct s_fd		*p;
-	struct s_fd		*l;
-	struct s_fd		*r;
-	enum color		c;
+	struct s_fd		*previous;
+	struct s_fd		*next;
 }					t_fd;
 
 /*
