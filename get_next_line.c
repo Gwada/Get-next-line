@@ -96,7 +96,7 @@ static	t_fd	*ft_find(t_fd *current, int fd)
 	if (fd > current->fd)
 	{
 		printf("fd > current->fd\n");
-		if (current->next && fd > current->next-fd)
+		if (current->next && fd >= current->next-fd)
 		{
 			printf("go current->next\n");
 			return (ft_find(current->next, fd));
@@ -111,7 +111,7 @@ static	t_fd	*ft_find(t_fd *current, int fd)
 	if (fd < current->fd)
 	{
 		printf ("fd < current->fd\n");
-		if (current->previous && fd < current->previous->fd)
+		if (current->previous && fd <= current->previous->fd)
 		{
 			printf ("current->fd\n");
 			return (ft_find(current->previous, fd));
