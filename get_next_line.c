@@ -6,7 +6,7 @@
 /*   By: dlavaury <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 14:32:58 by dlavaury          #+#    #+#             */
-/*   Updated: 2017/11/20 20:21:30 by dlavaury         ###   ########.fr       */
+/*   Updated: 2017/11/24 10:41:16 by dlavaury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static	void	puttree(t_fd *cur)
 	printf ("end puttree\n ");
 }
 
-static t_fd		*ft_create_one(int fd)
+static t_fd		*ft_create_one(t_fd *current, int fd)
 {
 	t_fd	*new;
 
@@ -41,8 +41,17 @@ static t_fd		*ft_create_one(int fd)
 	new->ret = 0;
 	ft_bzero(new->buffer, BUFF_SIZE + 1);
 	new->line = NULL;
-	new->previous = NULL;
-	new->next = NULL;
+	if (!current)
+	{
+		new->previous = NULL;
+		new->next = NULL;
+	}
+	else if (fd < current->fd)
+	{
+		new->previous = current->previous;
+		if (current->previous && fd > current->next->fd)
+			current->previous->next = new;
+	}
 	printf ("malloc ok out create\n");
 	return (new);
 }
@@ -80,19 +89,19 @@ static	t_fd	*ft_find(t_fd *current, int fd)
 	if (!current)
 	{
 		printf ("current NULL -> go malloc\n");
-		return ((current = ft_create_one(fd)) ? current : NULL);
+		return ((current = ft_create_one(current, fd)) ? current : NULL);
 		printf("malloc ok si visible problem\n");
 	}
 	if (fd > current->fd)
 	{
 		printf("fd > current->fd\n");
-		if (current->next)
+		if (current->next && fd > current->next-fd)
 		{
 			printf("go current->next\n");
 			return (ft_find(current->next, fd));
 		}
 		//printf("!current->next\n");
-		if (!(current->next = ft_create_one(fd)))
+		if (!(current->next = ft_create_one(current, fd)))
 			return (NULL);
 		printf ("malloc current->next ok\n");
 		current->next->previous = current;
@@ -101,13 +110,13 @@ static	t_fd	*ft_find(t_fd *current, int fd)
 	if (fd < current->fd)
 	{
 		printf ("fd < current->fd\n");
-		if (current->previous)
+		if (current->previous && fd < current->previous->fd)
 		{
 			printf ("current->fd\n");
 			return (ft_find(current->previous, fd));
 		}
 		printf ("curren->previous = NULL\n");
-		if (!(current->previous = ft_create_one(fd)))
+		if (!(current->previous = ft_create_one(current, fd)))
 			return (NULL);
 		/*if (current->previous)
 		if (current->previous)	printf ("malloc current->previous ok\n");
