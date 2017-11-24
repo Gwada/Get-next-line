@@ -51,6 +51,7 @@ static t_fd		*ft_create_one(t_fd *current, int fd)
 		new->previous = current->previous;
 		if (current->previous && fd > current->next->fd)
 			current->previous->next = new;
+		new->next = current;
 	}
 	printf ("malloc ok out create\n");
 	return (new);
