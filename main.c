@@ -17,6 +17,9 @@ int		main(int argc, char **argv)
 	int i = 0;
 	char	*testline;
 	while (++i < argc)
+	{
+		printf ("i = %d\n", i);
 		get_next_line(ft_atoi(argv[i]) , &testline);
+	}
 	return (0);
 }
