@@ -109,11 +109,10 @@ static	t_fd	*ft_find(t_fd *current, int fd)
 			return (ft_find(current->next, fd));
 		}
 		//printf("!current->next\n");
-		if (!(current->next = ft_create_one(current, fd)))
-			return (NULL);
+		return ((current = ft_create_one(current, fd)) ? current : NULL);
 		printf ("malloc current->next ok\n");
-		current->next->previous = current;
-		current = current->next;
+		/*current->next->previous = current;
+		current = current->next;*/
 	}
 	if (fd < current->fd)
 	{
@@ -124,15 +123,14 @@ static	t_fd	*ft_find(t_fd *current, int fd)
 			return (ft_find(current->previous, fd));
 		}
 		printf ("curren->previous = NULL\n");
-		if (!(current->previous = ft_create_one(current, fd)))
-			return (NULL);
+		return ((current = ft_create_one(current, fd))? current : NULL);
 		/*if (current->previous)
 		if (current->previous)	printf ("malloc current->previous ok\n");
 		current->previous->previous	?	printf ("current->previous->previous\n")	:	printf("current->previous->previous = NULL\n");
-		(current->previous->next) ? printf ("current->previous->next\n")	:	printf("current->previous->next = NULL\n");*/
+		(current->previous->next) ? printf ("current->previous->next\n")	:	printf("current->previous->next = NULL\n");
 		current->previous->next = current;
-		/*current->previous->next ? printf("%d %d\n", current->previous->fd, current->previous->next->fd)	:	printf("NULL\n");*/
-		current = current->previous;
+		current->previous->next ? printf("%d %d\n", current->previous->fd, current->previous->next->fd)	:	printf("NULL\n");
+		current = current->previous;*/
 	}
 	return (current);
 }
