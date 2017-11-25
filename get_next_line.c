@@ -41,12 +41,7 @@ static t_fd		*ft_create_one(t_fd *current, int fd)
 	new->ret = 0;
 	ft_bzero(new->buffer, BUFF_SIZE + 1);
 	new->line = NULL;
-	/*if (!current)
-	{
-		new->previous = NULL;
-		new->next = NULL;
-	}*/
-	else if (fd < current->fd)
+	if (fd < current->fd)
 	{
 		new->previous = current->previous;
 		if (current->previous)
@@ -97,7 +92,10 @@ static	t_fd	*ft_find(t_fd *current, int fd)
 	if (!current)
 	{
 		printf ("current NULL -> go malloc\n");
-		return (ft_create_one(current, fd));
+		if (!(current = ft_create_one(current, fd)))
+			return (NULL);
+		current->previous = NULL;
+		current->next = NULL;
 		printf("malloc ok si visible problem\n");
 	}
 	if (fd > current->fd)
