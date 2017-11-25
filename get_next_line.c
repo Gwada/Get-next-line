@@ -97,7 +97,7 @@ static	t_fd	*ft_find(t_fd *current, int fd)
 	if (!current)
 	{
 		printf ("current NULL -> go malloc\n");
-		return ((current = ft_create_one(current, fd)) ? current : NULL);
+		return (ft_create_one(current, fd));
 		printf("malloc ok si visible problem\n");
 	}
 	if (fd > current->fd)
