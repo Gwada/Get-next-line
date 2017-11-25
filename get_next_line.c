@@ -41,11 +41,11 @@ static t_fd		*ft_create_one(t_fd *current, int fd)
 	new->ret = 0;
 	ft_bzero(new->buffer, BUFF_SIZE + 1);
 	new->line = NULL;
-	if (!current)
+	/*if (!current)
 	{
 		new->previous = NULL;
 		new->next = NULL;
-	}
+	}*/
 	else if (fd < current->fd)
 	{
 		new->previous = current->previous;
