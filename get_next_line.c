@@ -6,7 +6,7 @@
 /*   By: dlavaury <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 14:32:58 by dlavaury          #+#    #+#             */
-/*   Updated: 2017/11/26 20:59:29 by dlavaury         ###   ########.fr       */
+/*   Updated: 2017/11/26 21:16:50 by dlavaury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,14 @@ static	t_fd	*ft_find(t_fd *current, int fd)
 	return (current);
 }
 
-static	void	ft_make_line(t_fd *cur)
+static	int		ft_make_line(t_fd *cur, char **line)
 {
+	if (!*line)
+	{
+		if (!(cur->line = (char*)malloc(sizeof(char) * cur->i + 1)))
+			return (-2);
+
+	}
 	if (cur->buffer[cur->i] == '\n' || cur->i < BUFF_SIZE - 1)
 		cur->again = 0;
 	if (cur->again)
@@ -141,7 +147,9 @@ int				get_next_line(const int fd, char **line)
 		while (cur->buffer[i] != '\n' && cur->buffer[i] && i < BUFF_SIZE)
 			i++;
 		cur->i = i;
-		ft_make_line(cur);
+		if ((ft_make_line(cur, line) == -2)
+			return (-1);
+		
 	}
 	//++cur->ret;
 	if (cur->ret < 0)
