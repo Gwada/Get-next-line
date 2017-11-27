@@ -6,7 +6,7 @@
 /*   By: dlavaury <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 14:33:19 by dlavaury          #+#    #+#             */
-/*   Updated: 2017/11/26 21:00:06 by dlavaury         ###   ########.fr       */
+/*   Updated: 2017/11/27 19:46:57 by dlavaury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include "libft.h"
 # include <stdio.h>//
 # include <fcntl.h>
+
 /*
 **	MACCROS
 */
@@ -34,11 +35,9 @@
 
 typedef struct		s_fd
 {
-	int				i;
 	int				fd;
-	size_t			ret;
-	int				again;
-	char			*temp;
+	int				nl;
+	int				ret;
 	char			buffer[BUFF_SIZE + 1];
 	struct s_fd		*previous;
 	struct s_fd		*next;

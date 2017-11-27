@@ -6,7 +6,7 @@
 /*   By: dlavaury <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/19 11:24:32 by dlavaury          #+#    #+#             */
-/*   Updated: 2017/11/26 21:00:03 by dlavaury         ###   ########.fr       */
+/*   Updated: 2017/11/27 19:13:06 by dlavaury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ int		main(int argc, char **argv)
 		printf("false open\n");
 		return (-1);
 	}
-	while (++i < 5)
+	while (get_next_line(fd, &testline) > 0)
 	{
-		get_next_line(fd, &testline);
-		printf ("%s", testline);
+		printf ("%d\n", i);
+		printf ("testline = %s\n\n", testline);
 	}
+	close(fd);
 	return (0);
 }
