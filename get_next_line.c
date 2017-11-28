@@ -6,29 +6,11 @@
 /*   By: dlavaury <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 14:32:58 by dlavaury          #+#    #+#             */
-/*   Updated: 2017/11/27 19:46:46 by dlavaury         ###   ########.fr       */
+/*   Updated: 2017/11/28 13:46:02 by dlavaury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-static	void	puttree(t_fd *cur)
-{
-	if (!cur)
-	{
-		printf("!cur\n");//
-		return ;
-	}
-	printf("NULL -> ");//
-	while (cur->previous)
-		cur = cur->previous;
-	while (cur)
-	{
-		printf("%d -> ", cur->fd);//
-		cur = cur->next;
-	}
-	printf("NULL\n");//
-}
 
 static t_fd		*ft_create_one(t_fd *current, int fd)
 {
@@ -39,7 +21,6 @@ static t_fd		*ft_create_one(t_fd *current, int fd)
 	new->fd = fd;
 	new->ret = 0;
 	ft_bzero(new->buffer, BUFF_SIZE + 1);
-	new->tmp = NULL;
 	if (current && fd < current->fd)
 	{
 		new->previous = current->previous ? current->previous : NULL;
@@ -113,71 +94,56 @@ static	t_fd	*ft_find(t_fd *current, int fd)
 	return (current);
 }
 
-static	char	*ft_make_line(t_fd *cur, char **line, int i)
+static	char	*ft_make_line(t_fd *cur, char **line)
 {
 	char		*new;
 
 	new = NULL;
-	printf ("in make\n");//
-	if (cur->buffer[i] == '\n')
-	{
+	while (cur->buffer[cur->i] && cur->buffer[cur->i] != '\n')
+		cur->i++;
+	if (cur->buffer[cur->i] == '\n')
 		cur->nl = 1;
-		printf("buffer[i] == '\\n'\n");//
-	}
 	if (!*line)
-		if (!(new = ft_strsub(cur->buffer, 0, i)))
+		if (!(new = ft_strsub(cur->buffer, 0, cur->i)))
 			return (NULL);
-//		printf ("new = %s\n", new);//
-//		ft_bzero(cur->buffer, BUFF_SIZE + 1);
-//	}
 	if (*line)
 	{
-//		printf ("test\n");
-		if (!(new = ft_strnew(ft_strlen(*line) + i)))
+		if (!(new = ft_strnew(ft_strlen(*line) + cur->i)))
 			return (NULL);
-		printf ("test\n");
-
 		ft_strcpy(new, *line);
-		ft_strcat(new, cur->buffer);
+		ft_strncat(new, cur->buffer, cur->i);
+		free(*line);
 	}
-//	printf ("end make\n");//
-//	if (!cur->nl)
-//		ft_bzero(cur->buffer, i + 1);
-//	else
-//	{
-		ft_strncpy(cur->buffer, &cur->buffer[i + 1], BUFF_SIZE);
-//	}
+	while (cur->buffer[cur->i] && cur->buffer[cur->i] == '\n')
+		cur->i++;
+	ft_strncpy(cur->buffer, &cur->buffer[cur->i], BUFF_SIZE);
 	return (new);
 }
 
 int				get_next_line(const int fd, char **line)
 {
 	static t_fd		*cur;
-	int				i;
+	char			*new;
 
 	if (fd < 0 || !line || BUFF_SIZE < 1 || !(cur = ft_find(cur, fd)))
 		return (-1);
-	line = NULL;
 	cur->nl = 0;
-	printf ("gnl\n");//
+	new = NULL;
+	if (*line)
+		*line = new;
 	while (!cur->nl)
 	{
-		i = 0;
-		if ((cur->ret = read(fd, cur->buffer, BUFF_SIZE)) == -1)
+		cur->i = 0;
+		if (!*cur->buffer)
+			if ((cur->ret = read(fd, cur->buffer, BUFF_SIZE)) == -1)
+				return (-1);
+		if (cur->ret && !(*line = ft_make_line(cur, line)))
 			return (-1);
-		while (cur->buffer[i] && cur->buffer[i] != '\n')
-			i++;
-		printf ("i = %d buffer = %s cur->ret = %d\n", i, cur->buffer, cur->ret);//
-		*line = ft_make_line(cur, line, i);
-		printf ("line = %s\nafter make line\ncur->ret = %d\n", *line, cur->ret);//
-		if (!cur->ret || cur->ret < BUFF_SIZE)
+		if (!cur->ret)
 		{
 			ft_del_one(cur);
 			return (0);
 		}
-		printf ("test\n");//
 	}
-	puttree(cur);
-	printf ("end gnl\n");//
 	return (1);
 }
