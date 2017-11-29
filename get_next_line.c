@@ -6,13 +6,13 @@
 /*   By: dlavaury <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 14:32:58 by dlavaury          #+#    #+#             */
-/*   Updated: 2017/11/28 13:46:02 by dlavaury         ###   ########.fr       */
+/*   Updated: 2017/11/29 04:10:58 by dlavaury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static t_fd		*ft_create_one(t_fd *current, int fd)
+static	t_fd	*ft_create_one(t_fd *current, int fd)
 {
 	t_fd	*new;
 
@@ -20,7 +20,7 @@ static t_fd		*ft_create_one(t_fd *current, int fd)
 		return (NULL);
 	new->fd = fd;
 	new->ret = 0;
-	ft_bzero(new->buffer, BUFF_SIZE + 1);
+	ft_bzero(new->buf, BUFF_SIZE + 1);
 	if (current && fd < current->fd)
 	{
 		new->previous = current->previous ? current->previous : NULL;
@@ -99,50 +99,44 @@ static	char	*ft_make_line(t_fd *cur, char **line)
 	char		*new;
 
 	new = NULL;
-	while (cur->buffer[cur->i] && cur->buffer[cur->i] != '\n')
+	cur->i = 0;
+	while (cur->buf[cur->i] && cur->buf[cur->i] != '\n')
 		cur->i++;
-	if (cur->buffer[cur->i] == '\n')
+	if (cur->buf[cur->i] == '\n')
 		cur->nl = 1;
-	if (!*line)
-		if (!(new = ft_strsub(cur->buffer, 0, cur->i)))
-			return (NULL);
-	if (*line)
-	{
-		if (!(new = ft_strnew(ft_strlen(*line) + cur->i)))
-			return (NULL);
-		ft_strcpy(new, *line);
-		ft_strncat(new, cur->buffer, cur->i);
-		free(*line);
-	}
-	while (cur->buffer[cur->i] && cur->buffer[cur->i] == '\n')
+	if (!(new = ft_strnew(ft_strlen(*line) + cur->i)))
+		return (NULL);
+	ft_strcpy(new, *line);
+	ft_strncat(new, cur->buf, cur->i);
+	free(*line);
+	if (cur->nl)
 		cur->i++;
-	ft_strncpy(cur->buffer, &cur->buffer[cur->i], BUFF_SIZE);
+	ft_strncpy(cur->buf, &cur->buf[cur->i], BUFF_SIZE);
 	return (new);
 }
 
 int				get_next_line(const int fd, char **line)
 {
 	static t_fd		*cur;
-	char			*new;
 
 	if (fd < 0 || !line || BUFF_SIZE < 1 || !(cur = ft_find(cur, fd)))
 		return (-1);
 	cur->nl = 0;
-	new = NULL;
-	if (*line)
-		*line = new;
+	if (!(*line = ft_strnew(1)))
+		return (-1);
 	while (!cur->nl)
 	{
-		cur->i = 0;
-		if (!*cur->buffer)
-			if ((cur->ret = read(fd, cur->buffer, BUFF_SIZE)) == -1)
-				return (-1);
-		if (cur->ret && !(*line = ft_make_line(cur, line)))
+		if (!*cur->buf && ((cur->ret = read(fd, cur->buf, BUFF_SIZE)) == -1))
 			return (-1);
-		if (!cur->ret)
+		if (!(*line = ft_make_line(cur, line)))
+			return (-1);
+		if (cur->ret < BUFF_SIZE)
 		{
-			ft_del_one(cur);
-			return (0);
+			if (**line)
+				return (1);
+			if (!cur->ret && !*cur->buf && !*line)
+				ft_del_one(cur);
+			return (cur->ret ? 1 : 0);
 		}
 	}
 	return (1);

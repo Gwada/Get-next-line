@@ -6,7 +6,7 @@
 /*   By: dlavaury <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 14:33:19 by dlavaury          #+#    #+#             */
-/*   Updated: 2017/11/28 13:35:07 by dlavaury         ###   ########.fr       */
+/*   Updated: 2017/11/29 04:08:39 by dlavaury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 **	MACCROS
 */
 
-# define BUFF_SIZE 1
+# define BUFF_SIZE 33
 
 /*
 **	STRUCTURES
@@ -38,7 +38,7 @@ typedef struct		s_fd
 	int				fd;
 	int				nl;
 	int				ret;
-	char			buffer[BUFF_SIZE + 1];
+	char			buf[BUFF_SIZE + 1];
 	struct s_fd		*previous;
 	struct s_fd		*next;
 }					t_fd;

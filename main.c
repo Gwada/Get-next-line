@@ -6,7 +6,7 @@
 /*   By: dlavaury <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/19 11:24:32 by dlavaury          #+#    #+#             */
-/*   Updated: 2017/11/28 13:45:59 by dlavaury         ###   ########.fr       */
+/*   Updated: 2017/11/29 04:34:02 by dlavaury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,56 @@
 int		main(int argc, char **argv)
 {
 	int		i;
-	int		fd;
+//	int		j;
+	int k;
+	int	fd;
+//	int		fd[3];
 	char	*testline;
 
-	i = 0;
+	i = -1;
 	(void)argc;
-	if ((fd = open(argv[1], O_RDONLY)) == -1)
+	/*while (++i < 3)
 	{
-		printf("false open\n");
-		return (-1);
+		if ((fd[i] = open(argv[i + 1], O_RDONLY)) == -1)
+		{
+			printf("false open\n");
+			return (-1);
+		}
+		printf ("open %d RAS\n", i + 1);
 	}
-	while (get_next_line(fd, &testline) > 0)
+	i = -1;
+	k = 0;
+	while (++i < 15)
 	{
-		printf("%s\n", testline);
-		free(testline);
-		testline = NULL;
+		printf ("\n");
+		j = -1;
+		while (++j < 3)
+		{
+			printf ("j = %d	GNL = %d	", j, (k = get_next_line(fd[j]), &testline[j]));
+			printf("	%d	%s\n",k, testline[j]);
+			free(testline[j]);
+			testline[j] = NULL;
+//		}
 	}
-	close(fd);
+	//i = 0;
+	//while (i < 3)
+	//{
+		//close(fd[i]);
+		//close(fd);
+	//	i++;
+	//}*/
+	fd = open(argv[1], O_RDONLY);
+	k = 0;
+	int l = 0;
+	while ((l = get_next_line(fd, &testline)) > 0)
+	{
+		//printf ("_______________________________________________________________________\n");
+		printf ("%s\n", testline);
+		//printf ("_______________________________________________________________________\n\n\n");
+		//printf("\nverif main:	appel n: %d		retour gnl = %d		testline = %s\n\n\n", ++k, l,testline);//
+		free (testline);
+	}
+	//printf("%d	end\n",k);//
+	close (fd);
 	return (0);
 }
