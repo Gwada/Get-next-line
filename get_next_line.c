@@ -45,7 +45,7 @@ static	t_fd	*ft_del_one(t_fd *current)
 	if (current && !current->previous && !current->next)
 	{
 		free(current);
-		current = NULL;
+		return ((current = NULL));
 	}
 	else if (current && !current->previous && current->next)
 	{
@@ -132,11 +132,12 @@ int				get_next_line(const int fd, char **line)
 			return (-1);
 		if (cur->ret < BUFF_SIZE)
 		{
-			if (**line)
-				return (1);
-			if (!cur->ret && !*cur->buf && !*line)
-				ft_del_one(cur);
-			return (cur->ret ? 1 : 0);
+			if (!cur->ret && !*cur->buf && !**line)
+			{
+				cur = ft_del_one(cur);
+				return (0);
+			}
+			return (**line || cur->ret ? 1 : 0);
 		}
 	}
 	return (1);
