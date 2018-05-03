@@ -45,7 +45,7 @@ static	t_fd	*ft_del_one(t_fd *current)
 	if (current && !current->previous && !current->next)
 	{
 		free(current);
-		return ((current = NULL));
+		return (NULL);
 	}
 	else if (current && !current->previous && current->next)
 	{
